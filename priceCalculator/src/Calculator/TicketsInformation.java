@@ -26,4 +26,8 @@ public class TicketsInformation {
 		this.stops = stops;
 		this.transferPlaces = transferPlaces;
 	}
+	
+	public boolean equals() {
+		return false;
+	}
 }

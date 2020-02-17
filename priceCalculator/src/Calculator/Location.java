@@ -1,12 +1,15 @@
 package Calculator;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Location {
 	String type; // want to go, been there, current place
-	LinkedList<String> city;
+	List<String> city;
 	
-	public Location(String type, LinkedList<String> city) {
+	public Location() {}
+	
+	public Location(String type, List<String> city) {
 		this.type = type;
 		this.city = city;
 	}
