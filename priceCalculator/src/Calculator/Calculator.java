@@ -71,7 +71,7 @@ public class Calculator {
 					// call the search function every time
 
 					List<TicketsInformation> tempList = searchTickets(departure, arrival, date);
-
+					//Thread.sleep(1);
 					ticketsList.addAll(tempList);
 				}
 			}
@@ -105,23 +105,125 @@ public class Calculator {
 //			}
 //		}
 //		return null;
-		String filePath = "C:\\Users\\mayu1\\OneDrive\\Documents\\2020Spring\\CSE687OOD\\TermProject\\cse687\\communivate_with_java_test.py";
-		ProcessBuilder pb = new ProcessBuilder().command("py", "-u", filePath);
+		String arguments = "C:\\Users\\mayu1\\OneDrive\\Documents\\2020Spring\\CSE687OOD\\TermProject\\cse687\\communicate_with_java_test.py" + " " + departure + " " + arrival + " " + date;
+		ProcessBuilder pb = new ProcessBuilder().command("py", "-u", arguments);
 		Process p = pb.start();
 		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		StringBuilder buffer = new StringBuilder();
 		String line = null;
-		line = in.readLine();
+		//line = in.readLine();
+		
+		/*
+		 * deal with the issue that py file can not be called.
+		 */
 		while ((line = in.readLine()) != null) {
 			buffer.append(line);
 			buffer.append('\n');
 		}
 		p.waitFor();
 		String str = buffer.toString();
+//		String str = "1 152.52 27.5 Priceline\r\n" + 
+//				"2 176.18 0.0 OneTravel\r\n" + 
+//				"2 176.18 0.0 CheapoAir\r\n" + 
+//				"2 246.17 0.0 CheapTickets\r\n" + 
+//				"2 246.17 0.0 Orbitz\r\n" + 
+//				"2 246.18 0.0 Expedia\r\n" + 
+//				"3 190.79 0.0 CheapTickets\r\n" + 
+//				"3 190.79 0.0 Orbitz\r\n" + 
+//				"3 190.79 0.0 Expedia\r\n" + 
+//				"3 190.80005 28.80825 OneTravel\r\n" + 
+//				"3 190.82 28.8 Priceline\r\n" + 
+//				"4 190.80005 28.80825 OneTravel\r\n" + 
+//				"5 197.18 0.0 OneTravel\r\n" + 
+//				"5 197.18 0.0 CheapoAir\r\n" + 
+//				"5 259.17 0.0 CheapTickets\r\n" + 
+//				"5 259.17 0.0 Orbitz\r\n" + 
+//				"5 259.17 0.0 Expedia\r\n" + 
+//				"6 206.18 0.0 CheapoAir\r\n" + 
+//				"6 210.18 9.176496 OneTravel\r\n" + 
+//				"6 286.18 0.0 Expedia\r\n" + 
+//				"6 286.18 0.0 Orbitz\r\n" + 
+//				"6 286.18 0.0 CheapTickets\r\n" + 
+//				"6 286.22 23.2 Priceline\r\n" + 
+//				"7 214.2 0.0 FlightNetwork\r\n" + 
+//				"7 224.2 23.1965 OneTravel\r\n" + 
+//				"8 227.17 0.0 CheapoAir\r\n" + 
+//				"8 227.18 0.0 OneTravel\r\n" + 
+//				"8 299.17 0.0 Expedia\r\n" + 
+//				"8 299.17 0.0 CheapTickets\r\n" + 
+//				"8 299.17 0.0 Orbitz\r\n" + 
+//				"9 228.78 0.0 Orbitz\r\n" + 
+//				"9 228.78 0.0 CheapTickets\r\n" + 
+//				"9 228.80005 28.81775 OneTravel\r\n" + 
+//				"10 234.80005 28.79775 OneTravel\r\n" + 
+//				"11 235.48001 11.9015 OneTravel\r\n" + 
+//				"11 235.48001 11.9015 CheapoAir\r\n" + 
+//				"12 251.8 28.8235 OneTravel\r\n" + 
+//				"13 251.8 28.8235 OneTravel\r\n" + 
+//				"14 257.18 0.0 OneTravel\r\n" + 
+//				"14 261.18 5.351496 CheapoAir\r\n" + 
+//				"14 267.21 23.2 Priceline\r\n" + 
+//				"0 F9 2186 EWR ONT 2020-05-20T07:29:00-04:00 2020-05-20T10:32:00-07:00\r\n" + 
+//				"0 F9 2186 ONT LAS 2020-05-20T11:22:00-07:00 2020-05-20T12:25:00-07:00\r\n" + 
+//				"0 F9 2163 LAS LAX 2020-05-20T13:50:00-07:00 2020-05-20T15:20:00-07:00\r\n" + 
+//				"1 F9 2186 EWR ONT 2020-05-20T07:29:00-04:00 2020-05-20T10:32:00-07:00\r\n" + 
+//				"1 F9 2186 ONT LAS 2020-05-20T11:22:00-07:00 2020-05-20T12:25:00-07:00\r\n" + 
+//				"1 F9 2163 LAS LAX 2020-05-20T13:50:00-07:00 2020-05-20T15:20:00-07:00\r\n" + 
+//				"2 NK 917 LGA DFW 2020-05-20T13:49:00-04:00 2020-05-20T16:45:00-05:00\r\n" + 
+//				"2 NK 869 DFW LAX 2020-05-20T17:37:00-05:00 2020-05-20T19:02:00-07:00\r\n" + 
+//				"3 F9 259 EWR DEN 2020-05-20T05:30:00-04:00 2020-05-20T08:02:00-06:00\r\n" + 
+//				"3 F9 405 DEN LAX 2020-05-20T12:36:00-06:00 2020-05-20T14:11:00-07:00\r\n" + 
+//				"4 F9 259 EWR DEN 2020-05-20T05:30:00-04:00 2020-05-20T08:02:00-06:00\r\n" + 
+//				"4 F9 407 DEN LAX 2020-05-20T22:01:00-06:00 2020-05-20T23:35:00-07:00\r\n" + 
+//				"5 NK 703 EWR IAH 2020-05-20T12:00:00-04:00 2020-05-20T14:48:00-05:00\r\n" + 
+//				"5 NK 327 IAH LAX 2020-05-20T15:48:00-05:00 2020-05-20T17:28:00-07:00\r\n" + 
+//				"6 NK 1174 EWR BNA 2020-05-20T10:00:00-04:00 2020-05-20T11:30:00";
+		String[] strArr = str.split("\n");
+		Set<Integer> alreadyChecked = new HashSet<>();
+		
+		List<TicketsInformation> res = new ArrayList<>();
+		
+		/*
+		 * get very detail information from the return string above
+		 */
+		for(String s : strArr) {
+			if(s.length() <= 40) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(s.charAt(0)).append(s.charAt(1));
+				String singleTicket = sb.toString();
+				int ticketId = Integer.parseInt(singleTicket.trim());
+				if(!alreadyChecked.contains(ticketId)) {
+					boolean start = false;
+					boolean end = false;
+					StringBuilder newSb = new StringBuilder();
+					for(char c : s.toCharArray()) {
+						if(c != ' ' && start) {
+							newSb.append(c);
+							end = true;
+						}
+						else if(c == ' ' && !start) {
+							start = true;
+						}
+						else if(c == ' ' && end) {
+							break;
+						}
+					}
+					if(Double.parseDouble(newSb.toString()) != 0) {
+						TicketsInformation newTicket = new TicketsInformation(departure, arrival, date, "", "", "", "", Double.parseDouble(newSb.toString()), 0, "");
+						res.add(newTicket);
+					}
+					
+					alreadyChecked.add(ticketId);
+				}
+			}
+			else {
+				continue;
+			}
+		}
 
 		// System.out.println("Process exit value:" + exitCode);
 		in.close();
-		return null;
+		return res;
 	}
 
 	// calculate the best price
@@ -153,7 +255,7 @@ public class Calculator {
 							if (t2.equals(t1)) {
 								continue;
 							} else {
-								if (t2.destination.equals(arrival)) {
+								if (t2.destination.equals(arrival) && !t2.departure.equals(departure)) {
 									// combineList.add(t2);
 									TicketsUnit tu1 = new TicketsUnit(t1, t2, t1.price + t2.price);
 									TicketsUnit tu2 = new TicketsUnit(t2, t1, t1.price + t2.price);

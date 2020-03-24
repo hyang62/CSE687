@@ -1,15 +1,20 @@
 import requests
 import linecache
 import json
+import sys
 
 
-def Test1():
+def Test1(startP, destP, time):
     url = "https://tripadvisor1.p.rapidapi.com/flights/create-session"
 
-    querystring = {"currency": "USD", "ta": "1", "ts": "0", "c": "0", "d1": "LAX", "o1": "NYC", "dd1": "2020-05-20"}
+    d1 = startP
+    o1 = destP
+    dd1 = time
+
+    querystring = {"currency": "USD", "ta": "1", "ts": "0", "c": "0", "d1": d1, "o1": o1, "dd1": dd1}
     headers = {
         'x-rapidapi-host': "tripadvisor1.p.rapidapi.com",
-        'x-rapidapi-key': "5fdeb91092msh41473e4a47d634bp112fe0jsncc889b135197"
+        'x-rapidapi-key': "8ebc5a0100msh214e79a701218a7p1bd719jsn7de34343b7d0"
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
 
@@ -21,19 +26,20 @@ def Test1():
     querystring = {"currency": "USD", "ns": "NON_STOP%2CONE_STOP", "so": "PRICE", "sid": sidval}
     headers = {
         'x-rapidapi-host': "tripadvisor1.p.rapidapi.com",
-        'x-rapidapi-key': "5fdeb91092msh41473e4a47d634bp112fe0jsncc889b135197"
+        'x-rapidapi-key': "8ebc5a0100msh214e79a701218a7p1bd719jsn7de34343b7d0"
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
 
     response_dict = response.json()
+    data = response_dict['itineraries']
 
-    with open('C:\Test1\itineriries.json', 'w',
-              encoding='utf-8') as fs:
-        json.dump(response_dict['itineraries'], fs)
-
-    json_data = open('C:\Test1\itineriries.json',
-                     encoding='utf-8').read()
-    data = json.loads(json_data)
+    # with open('C:\Test1\itineriries.json', 'w',
+    #           encoding='utf-8') as fs:
+    #     json.dump(response_dict['itineraries'], fs)
+    #
+    # json_data = open('C:\Test1\itineriries.json',
+    #                  encoding='utf-8').read()
+    # data = json.loads(json_data)
 
     i = 0
     price_info = ""
@@ -55,4 +61,5 @@ def Test1():
 
 
 if __name__ == '__main__':
-    Test1()
+
+    Test1(sys.argv[1], sys.argv[2], sys.argv[3])
