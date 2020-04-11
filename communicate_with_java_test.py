@@ -4,12 +4,24 @@ import json
 import sys
 
 
-def Test1(startP, destP, time):
+# from iata_codes import IATACodesClient
+
+def Test1(departure: str, arrival: str, date: str) -> str:
+
+    """
+
+    :rtype: str
+    """
     url = "https://tripadvisor1.p.rapidapi.com/flights/create-session"
 
-    d1 = startP
-    o1 = destP
-    dd1 = time
+    d1 = departure
+    o1 = arrival
+    dd1 = date
+
+    # d1 = 'NYC'
+    # o1 = 'LAX'
+    # dd1 = '2020-06-01'
+    # client = IATACodesClient()
 
     querystring = {"currency": "USD", "ta": "1", "ts": "0", "c": "0", "d1": d1, "o1": o1, "dd1": dd1}
     headers = {
@@ -48,7 +60,8 @@ def Test1(startP, destP, time):
 
     for item in data:
         for price in data[i]['l']:
-            price_info += str(i) + ' ' + str(price['pr']['p']) + ' ' + str(price['pr']['f']) + ' ' + str(price['s']) + '\n'
+            price_info += str(i) + ' ' + str(price['pr']['p']) + ' ' + str(price['pr']['f']) + ' ' + str(
+                price['s']) + '\n'
         for flight in data[i]['f']:
             for info in flight['l']:
                 flight_info += str(i) + ' ' + info['m'] + ' ' + info['f'] + ' ' + info['da'] + ' ' + info['aa'] + ' ' + \
@@ -61,5 +74,4 @@ def Test1(startP, destP, time):
 
 
 if __name__ == '__main__':
-
     Test1(sys.argv[1], sys.argv[2], sys.argv[3])

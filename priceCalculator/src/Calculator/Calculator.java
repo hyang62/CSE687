@@ -1,15 +1,19 @@
 package Calculator;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Calculator {
@@ -71,7 +75,7 @@ public class Calculator {
 					// call the search function every time
 
 					List<TicketsInformation> tempList = searchTickets(departure, arrival, date);
-					//Thread.sleep(1);
+					// Thread.sleep(1);
 					ticketsList.addAll(tempList);
 				}
 			}
@@ -85,34 +89,16 @@ public class Calculator {
 		if (departure == null || arrival == null || date == null) {
 			return null;
 		}
-//		switch(departure) {
-//		case "New York":
-//			if(arrival.equals("London")) {
-//				return Arrays.asList(new TicketsInformation("New York", "London", "2020-05-01", "10:15", "23:15", "07:00", "British Airlines", 200, 0, ""));
-//			}
-//			else {
-//				return Arrays.asList(new TicketsInformation("New York", "Paris", "2020-05-01", "10:15", "23:15", "07:00",
-//						"France Airlines", 200, 0, ""));
-//			}
-//		case "Shenzhen":
-//			if(arrival.equals("London")) {
-//				return Arrays.asList(new TicketsInformation("Shenzhen", "London", "2020-05-01", "17:15", "21:15", "12:00",
-//						"China Airlines", 300, 0, ""));
-//			}
-//			else {
-//				return Arrays.asList(new TicketsInformation("Shenzhen", "Paris", "2020-05-01", "17:15", "21:15", "12:00",
-//				"China Airlines", 260, 0, ""));
-//			}
-//		}
-//		return null;
-		String arguments = "C:\\Users\\mayu1\\OneDrive\\Documents\\2020Spring\\CSE687OOD\\TermProject\\cse687\\communicate_with_java_test.py" + " " + departure + " " + arrival + " " + date;
-		ProcessBuilder pb = new ProcessBuilder().command("py", "-u", arguments);
-		Process p = pb.start();
+
+		String arguments = "C:\\Users\\mayu1\\OneDrive\\Documents\\2020Spring\\CSE687OOD\\TermProject\\cse687\\communicate_with_java_test.py"
+				+ " " + departure + " " + arrival + " " + date;
+
+		Process p = Runtime.getRuntime().exec("py "+arguments);
 		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		StringBuilder buffer = new StringBuilder();
 		String line = null;
 		//line = in.readLine();
-		
+
 		/*
 		 * deal with the issue that py file can not be called.
 		 */
@@ -180,43 +166,41 @@ public class Calculator {
 //				"6 NK 1174 EWR BNA 2020-05-20T10:00:00-04:00 2020-05-20T11:30:00";
 		String[] strArr = str.split("\n");
 		Set<Integer> alreadyChecked = new HashSet<>();
-		
+
 		List<TicketsInformation> res = new ArrayList<>();
-		
+
 		/*
 		 * get very detail information from the return string above
 		 */
-		for(String s : strArr) {
-			if(s.length() <= 40) {
+		for (String s : strArr) {
+			if (s.length() <= 40) {
 				StringBuilder sb = new StringBuilder();
 				sb.append(s.charAt(0)).append(s.charAt(1));
 				String singleTicket = sb.toString();
 				int ticketId = Integer.parseInt(singleTicket.trim());
-				if(!alreadyChecked.contains(ticketId)) {
+				if (!alreadyChecked.contains(ticketId)) {
 					boolean start = false;
 					boolean end = false;
 					StringBuilder newSb = new StringBuilder();
-					for(char c : s.toCharArray()) {
-						if(c != ' ' && start) {
+					for (char c : s.toCharArray()) {
+						if (c != ' ' && start) {
 							newSb.append(c);
 							end = true;
-						}
-						else if(c == ' ' && !start) {
+						} else if (c == ' ' && !start) {
 							start = true;
-						}
-						else if(c == ' ' && end) {
+						} else if (c == ' ' && end) {
 							break;
 						}
 					}
-					if(Double.parseDouble(newSb.toString()) != 0) {
-						TicketsInformation newTicket = new TicketsInformation(departure, arrival, date, "", "", "", "", Double.parseDouble(newSb.toString()), 0, "");
+					if (Double.parseDouble(newSb.toString()) != 0) {
+						TicketsInformation newTicket = new TicketsInformation(departure, arrival, date, "", "", "", "",
+								Double.parseDouble(newSb.toString()), 0, "");
 						res.add(newTicket);
 					}
-					
+
 					alreadyChecked.add(ticketId);
 				}
-			}
-			else {
+			} else {
 				continue;
 			}
 		}
@@ -348,6 +332,125 @@ public class Calculator {
 		return;
 	}
 
+	static HashMap<Integer, Users> userDict = new HashMap<Integer, Users>();
+
+	static int userUniqueId = 0;
+
+	static void addUser() {
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Create a user name:");
+		String userName = sc.next();
+		System.out.println("Input your email address:");
+		String email = sc.next();
+		System.out.println("Input your phone number:");
+		String phone = sc.next();
+
+		List<Location> list = new ArrayList<Location>();
+		Location base = new Location("base");
+		Location beenThere = new Location("beenThere");
+		Location desirePlaces = new Location("desirePlaces");
+		list.add(base);
+		list.add(beenThere);
+		list.add(desirePlaces);
+
+		String answer = "";
+		while (!answer.equals("Yes") || !answer.equals("yes") || !answer.equals("No") || !answer.equals("no")) {
+			System.out.println("Set your default location now? Please enter: 'Yes' or 'No'.\n");
+			answer = sc.next();
+
+			if (answer.equals("Yes") || answer.equals("yes")) {
+
+				// Adding the base city.
+				System.out.println("Enter a city name as your base: \n");
+				String cityName = sc.nextLine();
+				list.get(0).city.add(cityName);
+
+				// Adding the cities that you have been to.
+
+				boolean finish = sc.hasNext();
+				while (!finish) {
+					System.out.println("Enter a city name that you have been there:");
+
+					cityName = sc.nextLine();
+
+					list.get(1).city.add(cityName);
+
+					boolean finishAdding = !sc.hasNext();
+
+					while (!finishAdding) {
+						System.out.println("Finish adding the cities you have been to? Please enter: 'Yes' or 'No'.\n");
+						String finishAnswer = sc.nextLine();
+
+						if (finishAnswer.equals("Yes") || finishAnswer.equals("yes")) {
+							finish = true;
+							break;
+						} else if (finishAnswer.equals("No") || finishAnswer.equals("no")) {
+							break;
+						} else {
+							System.out.println("The input is invalid! Please enter the proper answer.");
+						}
+					}
+
+				}
+
+				// Adding the cities that you want to go.
+				finish = false;
+				while (!finish) {
+
+					System.out.println("Enter a city name that you want to go: \n");
+					cityName = sc.next();
+					list.get(2).city.add(cityName);
+
+					while (true) {
+						System.out.println("Finish adding the cities you want to go? Please enter: 'Yes' or 'No'.\n");
+						String finishAnswer = sc.next();
+
+						if (finishAnswer.equals("Yes") || finishAnswer.equals("yes")) {
+							finish = true;
+							break;
+						} else if (finishAnswer.equals("No") || finishAnswer.equals("no")) {
+							break;
+						} else {
+							System.out.println("The input is invalid! Please enter the proper answer.");
+						}
+					}
+
+				}
+			} else if (answer.equals("No") || answer.equals("no")) {
+				break;
+			} else {
+				System.out.println("The input is invalid! Please enter the proper answer.");
+			}
+		}
+
+		userUniqueId++;
+		userDict.put(userUniqueId, new Users(userUniqueId, userName, email, phone, list));
+		System.out.println("User adding finished.");
+	};
+
+	static void deleteUser() {
+		System.out.println("Enter the id of the user you want to delete: ");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+
+		while (true) {
+			System.out.println("Are you sure you want to delete user: " + userDict.get(id).userName
+					+ "? Please enter 'Yes' or 'No'.");
+			String answer = sc.next();
+			if (answer.equals("Yes") || answer.equals("yes")) {
+				userDict.remove(id);
+				System.out.println("The user has been deleted.");
+				return;
+			} else if (answer.equals("No") || answer.equals("no")) {
+				System.out.println("Deleting cancelled.");
+				return;
+			} else {
+				System.out.println("The input is invalid! Please enter the proper answer.");
+			}
+		}
+	};
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 //		TicketsInformation t1 = new TicketsInformation("New York", "London", "2020-05-01", "10:15", "23:15", "07:00",
 //				"British Airlines", 200, 0, "");
@@ -363,20 +466,24 @@ public class Calculator {
 //		rawTicketsList.add(t2);
 //		rawTicketsList.add(t4);
 
-		Location l11 = new Location("base", Arrays.asList("New York"));
+		
+		Location l11 = new Location("base", Arrays.asList("NYC"));
 		Location l12 = new Location("beenThere", Arrays.asList("Los Angeles", "Tokyo"));
-		Location l13 = new Location("desirePlaces", Arrays.asList("London", "Paris"));
-
-		Location l21 = new Location("base", Arrays.asList("Shenzhen"));
+		Location l13 = new Location("desirePlaces", Arrays.asList("LON", "SYD", "ZQN"));
+		Location l14 = new Location("desirePlaces", Arrays.asList("SFO", "MCO", "DEN"));
+		
+		Location l21 = new Location("base", Arrays.asList("SZX"));
+		Location l28 = new Location("base", Arrays.asList("LAX"));
 		Location l22 = new Location("beenThere", Arrays.asList("Shanghai", "Osaka"));
-		Location l23 = new Location("desirePlaces", Arrays.asList("London", "Paris"));
+		Location l23 = new Location("desirePlaces", Arrays.asList("LON", "MEX", "ZQN"));
+		Location l24 = new Location("desirePlaces", Arrays.asList("MCO", "DEN", "ORD"));
+		
+		List<Location> ll1 = Arrays.asList(l11, l12, l14);
+		List<Location> ll2 = Arrays.asList(l28, l22, l24);
 
-		List<Location> ll1 = Arrays.asList(l11, l12, l13);
-		List<Location> ll2 = Arrays.asList(l21, l22, l23);
-
-		Users u1 = new Users(1, "Rui", "rtao@syr.edu", "3158985109", ll1);
-		Users u2 = new Users(2, "Yu", "yma@syr.edu", "3158985108", ll2);
-
+		Users u1 = new Users(1, "Yu", "yma164@syr.edu", "3158985108", ll1);
+		Users u2 = new Users(2, "Symphony", "symphony945@hotmail.com", "18028707040", ll2);
+		
 		List<TicketsInformation> raw = collectingTickets(Arrays.asList(u1, u2), "2020-05-10");
 
 		// testCombinedTickets.add(t1);
