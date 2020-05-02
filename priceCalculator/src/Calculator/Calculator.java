@@ -2,6 +2,7 @@ package Calculator;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class Calculator {
 					// call the search function every time
 
 					List<TicketsInformation> tempList = searchTickets(departure, arrival, date);
-					// Thread.sleep(1);
+					Thread.sleep(5000);
 					ticketsList.addAll(tempList);
 				}
 			}
@@ -89,12 +90,38 @@ public class Calculator {
 		if (departure == null || arrival == null || date == null) {
 			return null;
 		}
+		
+		int tryTime = 6;
+		Process p = null;
+		BufferedReader in = null;
+		boolean flag = false;
+		while(tryTime-- > 0) {
+			String arguments = "communicate_with_java_test.py"
+					+ " " + departure + " " + arrival + " " + date;
+			System.out.println("Now searching: " + departure + " --> " + arrival + " " + date);
+			p = Runtime.getRuntime().exec("py "+arguments);
+			Thread.sleep(5000);
+			in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			
+			String logFileName = departure + "to" + arrival + ".txt";
+			
+			BufferedReader in1 = new BufferedReader(new FileReader(logFileName));
+			
+			if(in1.readLine() != null) {
+				flag = true;
+				break;
+				
+			}
+			else {
+				System.out.println(tryTime);
+			}
+		}
+		if(!flag) {
+			System.out.println("Searching failed!");
+			return null;
+		}
 
-		String arguments = "C:\\Users\\mayu1\\OneDrive\\Documents\\2020Spring\\CSE687OOD\\TermProject\\cse687\\communicate_with_java_test.py"
-				+ " " + departure + " " + arrival + " " + date;
-
-		Process p = Runtime.getRuntime().exec("py "+arguments);
-		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		
 		StringBuilder buffer = new StringBuilder();
 		String line = null;
 		//line = in.readLine();
@@ -303,8 +330,7 @@ public class Calculator {
 
 	// print the ticket's information
 	public static void printTicket(TicketsInformation t) {
-		System.out.println("Departure: " + t.departure + "\nArrival: " + t.destination + "\nDeparture Time: "
-				+ t.departureTime + " Arrival Time: " + t.arrivalTime + "\nPrice: " + t.price);
+		System.out.println("Departure: " + t.departure + "\nArrival: " + t.destination + "\nPrice: " + t.price);
 		return;
 	}
 
@@ -323,11 +349,10 @@ public class Calculator {
 	}
 
 	public static void printList(List<TicketsUnit> list) {
-		int id = 1;
-		for (TicketsUnit unit : list) {
-			System.out.println("Option " + id + ":");
+		for(int i = 0; i < 50; i ++) {
+			TicketsUnit unit = list.get(i);
+			System.out.println("Option " + (i + 1) + ":");
 			printTicketsUnit(unit);
-			id++;
 		}
 		return;
 	}
@@ -470,21 +495,22 @@ public class Calculator {
 		Location l11 = new Location("base", Arrays.asList("NYC"));
 		Location l12 = new Location("beenThere", Arrays.asList("Los Angeles", "Tokyo"));
 		Location l13 = new Location("desirePlaces", Arrays.asList("LON", "SYD", "ZQN"));
-		Location l14 = new Location("desirePlaces", Arrays.asList("SFO", "MCO", "DEN"));
+		Location l14 = new Location("desirePlaces", Arrays.asList("ORD", "MCO", "DEN"));
 		
 		Location l21 = new Location("base", Arrays.asList("SZX"));
 		Location l28 = new Location("base", Arrays.asList("LAX"));
 		Location l22 = new Location("beenThere", Arrays.asList("Shanghai", "Osaka"));
 		Location l23 = new Location("desirePlaces", Arrays.asList("LON", "MEX", "ZQN"));
-		Location l24 = new Location("desirePlaces", Arrays.asList("MCO", "DEN", "ORD"));
+		Location l24 = new Location("desirePlaces", Arrays.asList("ORD", "DEN", "SFO"));
 		
 		List<Location> ll1 = Arrays.asList(l11, l12, l14);
 		List<Location> ll2 = Arrays.asList(l28, l22, l24);
 
 		Users u1 = new Users(1, "Yu", "yma164@syr.edu", "3158985108", ll1);
-		Users u2 = new Users(2, "Symphony", "symphony945@hotmail.com", "18028707040", ll2);
+		Users u2 = new Users(2, "Rui", "rtao@hotmail.com", "3158985108", ll2);
 		
-		List<TicketsInformation> raw = collectingTickets(Arrays.asList(u1, u2), "2020-05-10");
+		
+		List<TicketsInformation> raw = collectingTickets(Arrays.asList(u1, u2), "2020-06-10");
 
 		// testCombinedTickets.add(t1);
 		// testCombinedTickets.add(t2);

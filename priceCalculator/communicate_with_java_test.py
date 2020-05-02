@@ -17,7 +17,10 @@ def Test1(departure: str, arrival: str, date: str) -> str:
     d1 = departure
     o1 = arrival
     dd1 = date
-
+    
+    filename = departure + 'to' + arrival + '.txt'
+    
+    f1 = open(filename, 'w')
     # d1 = 'NYC'
     # o1 = 'LAX'
     # dd1 = '2020-06-01'
@@ -26,7 +29,7 @@ def Test1(departure: str, arrival: str, date: str) -> str:
     querystring = {"currency": "USD", "ta": "1", "ts": "0", "c": "0", "d1": d1, "o1": o1, "dd1": dd1}
     headers = {
         'x-rapidapi-host': "tripadvisor1.p.rapidapi.com",
-        'x-rapidapi-key': "8ebc5a0100msh214e79a701218a7p1bd719jsn7de34343b7d0"
+        'x-rapidapi-key': "d0f9b5031bmsh02a6f5c5ff9f407p172ba2jsnf779a079db10"
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
 
@@ -38,7 +41,7 @@ def Test1(departure: str, arrival: str, date: str) -> str:
     querystring = {"currency": "USD", "ns": "NON_STOP%2CONE_STOP", "so": "PRICE", "sid": sidval}
     headers = {
         'x-rapidapi-host': "tripadvisor1.p.rapidapi.com",
-        'x-rapidapi-key': "8ebc5a0100msh214e79a701218a7p1bd719jsn7de34343b7d0"
+        'x-rapidapi-key': "d0f9b5031bmsh02a6f5c5ff9f407p172ba2jsnf779a079db10"
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
 
@@ -69,9 +72,12 @@ def Test1(departure: str, arrival: str, date: str) -> str:
         i += 1
 
     result = price_info + flight_info
+    f1.write(result)
     print(result)
     return result
 
 
 if __name__ == '__main__':
     Test1(sys.argv[1], sys.argv[2], sys.argv[3])
+    
+    f = open('executed.txt', 'r')
