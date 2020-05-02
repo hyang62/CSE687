@@ -494,17 +494,14 @@ public class Calculator {
 		
 		Location l11 = new Location("base", Arrays.asList("NYC"));
 		Location l12 = new Location("beenThere", Arrays.asList("Los Angeles", "Tokyo"));
-		Location l13 = new Location("desirePlaces", Arrays.asList("LON", "SYD", "ZQN"));
-		Location l14 = new Location("desirePlaces", Arrays.asList("ORD", "MCO", "DEN"));
+		Location l13 = new Location("desirePlaces", Arrays.asList("ORD", "MCO", "DEN"));
 		
-		Location l21 = new Location("base", Arrays.asList("SZX"));
-		Location l28 = new Location("base", Arrays.asList("LAX"));
+		Location l21 = new Location("base", Arrays.asList("LAX"));
 		Location l22 = new Location("beenThere", Arrays.asList("Shanghai", "Osaka"));
-		Location l23 = new Location("desirePlaces", Arrays.asList("LON", "MEX", "ZQN"));
-		Location l24 = new Location("desirePlaces", Arrays.asList("ORD", "DEN", "SFO"));
+		Location l23 = new Location("desirePlaces", Arrays.asList("ORD", "DEN", "SFO"));
 		
-		List<Location> ll1 = Arrays.asList(l11, l12, l14);
-		List<Location> ll2 = Arrays.asList(l28, l22, l24);
+		List<Location> ll1 = Arrays.asList(l11, l12, l13);
+		List<Location> ll2 = Arrays.asList(l21, l22, l23);
 
 		Users u1 = new Users(1, "Yu", "yma164@syr.edu", "3158985108", ll1);
 		Users u2 = new Users(2, "Rui", "rtao@hotmail.com", "3158985108", ll2);
